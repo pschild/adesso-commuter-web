@@ -11,7 +11,7 @@ WORKDIR /app
 COPY . .
 
 # build
-RUN npm run build -- --prod
+RUN npm run build
 
 FROM nginx:alpine
 
