@@ -1,11 +1,16 @@
-FROM node:13-alpine AS BUILD_IMAGE
+FROM node:14-alpine AS BUILD_IMAGE
+
+COPY package.json package-lock.json ./
+
+# install and create folder (to use Dockers caching mechansim)
+RUN npm install && mkdir /app && mv ./node_modules ./app
+
 WORKDIR /app
 
-# copy contents
-COPY . /app
+# copy the rest of the files into the created folder
+COPY . .
 
-# install and build
-RUN npm install
+# build
 RUN npm run build -- --prod
 
 FROM nginx:alpine
