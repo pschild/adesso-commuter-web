@@ -11,7 +11,7 @@ WORKDIR /app
 COPY . .
 
 # build
-RUN npm run build
+RUN npm run build -- --deploy-url=/adesso-commuter-web/ --prod
 
 FROM nginx:alpine
 
