@@ -1,26 +1,15 @@
+### STAGE 1: Build ###
 FROM node:12-alpine AS BUILD_IMAGE
-
-COPY package.json package-lock.json ./
-
-# install and create folder (to use Dockers caching mechansim)
-RUN npm install && mkdir /app && mv ./node_modules ./app
-
 WORKDIR /app
-
-# copy the rest of the files into the created folder
+COPY package.json package-lock.json ./
+RUN npm install
 COPY . .
-
-# build
 RUN npm run build -- --prod
 
+### STAGE 2: Run ###
 FROM nginx:alpine
-
-COPY ./.nginx/nginx.conf /etc/nginx/nginx.conf
-
-# remove default nginx index page
+COPY nginx.conf /etc/nginx/nginx.conf
 RUN rm -rf /usr/share/nginx/html/*
+COPY --from=BUILD_IMAGE /app/dist/adesso-commuter-web /usr/share/nginx/html
 
-# copy dist
-COPY --from=BUILD_IMAGE /app/dist /usr/share/nginx/html
-
-ENTRYPOINT ["nginx", "-g", "daemon off;"]
+# ENTRYPOINT ["nginx", "-g", "daemon off;"]
