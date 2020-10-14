@@ -3,6 +3,7 @@ import { NgModule } from '@angular/core';
 import { AppComponent } from './app.component';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { MqttModule } from 'ngx-mqtt';
+import { environment } from '../environments/environment';
 
 @NgModule({
   declarations: [
@@ -12,8 +13,8 @@ import { MqttModule } from 'ngx-mqtt';
     BrowserModule,
     BrowserAnimationsModule,
     MqttModule.forRoot({
-      hostname: '192.168.178.28',
-      port: 1884,
+      hostname: environment.env.WS_URL,
+      port: environment.env.WS_PORT,
       path: '',
       protocol: 'ws'
     })
